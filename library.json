@@ -23,9 +23,6 @@
     "frameworks": "*",
     "platforms": "*",
     "build": {
-        "extraScript": "scripts/pre-build.py"
-    },
-    "scripts": {
-        "postinstall": "scripts/post_install.py"
+        "extraScript": ["pre:scripts/post-install.py", "scripts/pre-build.py"]
     }
 }
