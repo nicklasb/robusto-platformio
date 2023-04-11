@@ -51,10 +51,15 @@ else:
 def add_menu(source, target, env):
     curr_env = env.subst('$PIOENV')
     curr_dir = os.path.join(env.subst('$PROJECT_LIBDEPS_DIR'), curr_env, "Robusto-PlatformIO", "scripts")
-
-    # Co we need to add a menuconfig target?
-    targets = env.get("__PIO_TARGETS") or {}
     
+    # Co we need to add a menuconfig target?
+    targets = env.get("__PIO_TARGETS")
+    if targets == None:
+        print("No targets")
+    else:
+        print("all targets: ")
+        print(targets.values())
+
     if "menuconfig" not in targets.values():
         if framework.lower() != "espidf":
 
