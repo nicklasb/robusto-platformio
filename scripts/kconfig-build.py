@@ -48,7 +48,7 @@ else:
 
 
 
-def add_menu():
+def add_menu(source, target, env):
     curr_env = env.subst('$PIOENV')
     curr_dir = os.path.join(env.subst('$PROJECT_LIBDEPS_DIR'), curr_env, "Robusto-PlatformIO", "scripts")
 
@@ -74,3 +74,4 @@ def add_menu():
             )
 
 env.AddPostAction("$PROGPATH", add_menu)
+
