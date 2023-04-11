@@ -1,6 +1,8 @@
-import os
 
 Import("env")
+
+import os
+
 
 # First, get our variables from the environment
 this_dir = os.path.join(env.subst('$PROJECT_LIBDEPS_DIR'), env.subst('$PIOENV'), 
