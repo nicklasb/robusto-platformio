@@ -12,8 +12,10 @@ pio_env = env.subst('$PIOENV')
 build_dir = os.path.join(env.subst('$BUILD_DIR'), "config")
 framework = env.subst('$PIOFRAMEWORK')
 
-
-
+print("Build dir: ", build_dir)
+print("Script dir: ", this_dir)
+print("environment: ", pio_env)
+print("framework: ", framework)
 # Create the build folder
 print("mkdir -p {0}".format(build_dir))
 os.system("mkdir -p {0}".format(build_dir))
@@ -22,14 +24,6 @@ os.system("mkdir -p {0}".format(build_dir))
 copy_include_cmd = "cp {0} {1} ".format(os.path.join(this_dir, "robconfig.h"), build_dir)
 print(copy_include_cmd)
 os.system(copy_include_cmd)
-
-print("Build dir: ", build_dir)
-print("Script dir: ", this_dir)
-print("environment: ", pio_env)
-
-# Add files to path
-env.Append(CPPPATH=[build_dir])
-env.BuildSources(build_dir, build_dir)
 
 
 # If its not ESP-IDF, we add the settings header anyway so that the framework and applications don't have to care.
@@ -47,6 +41,11 @@ else:
     print("Skipping ESP-IDF framework, it has its own Kconfig handling.")  
 
 
+
+
+# Add files to path
+env.Append(CPPPATH=[build_dir])
+env.BuildSources(build_dir, build_dir)
 
 def add_menu(source, target, env):
     curr_env = env.subst('$PIOENV')
