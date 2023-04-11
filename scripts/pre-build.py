@@ -2,7 +2,8 @@ import os
 
 Import("env")
 # Co we need to add a menuconfig target?
-if "menuconfig" in env.get("__PIO_TARGETS"):
+
+if "menuconfig" in list(env.get("__PIO_TARGETS").values()):
     framework = env.subst('$PIOFRAMEWORK')
     if framework.lower() != "espidf":
         project_dir = env.subst('$PROJECT_DIR')
