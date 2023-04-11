@@ -32,29 +32,13 @@ env.Append(CPPPATH=[build_dir])
 env.BuildSources(build_dir, build_dir)
 
 
-# If its not ESP-IDF, we add the settings header anyway so that the framework and applications don't have to care.
-if framework != "espidf":
-    # Check if there is anything for us to do here. TODO: Create the file if it is missing? Default configs?
-    kconfig_filename = os.path.join(project_dir, "Kconfig." + pio_env)
-    if os.path.isfile(kconfig_filename):
-        # Generate the config
-        gen_command = "KCONFIG_CONFIG=.config.{0} genconfig {1} --header-path {2}".format(pio_env, kconfig_filename, os.path.join(build_dir, "robconfig_.h"))
-        print(gen_command)
-        os.system(gen_command)
-    else: 
-        print("Won't do any config, no", kconfig_filename, " file.")  
-else: 
-    print("Skipping ESP-IDF framework, it has its own Kconfig handling.")  
-
-
-
 def add_menu(source, target, env):
     curr_env = env.subst('$PIOENV')
     curr_dir = os.path.join(env.subst('$PROJECT_LIBDEPS_DIR'), curr_env, "Robusto-PlatformIO", "scripts")
     
     # Co we need to add a menuconfig target?
     targets = env.get("__PIO_TARGETS")
-    if targets == None:
+    if targets:
         print("No targets")
     else:
         print("all targets: ")
