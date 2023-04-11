@@ -73,5 +73,5 @@ def add_menu(source, target, env):
                 description="Menuconfig is a tool for configuring an environment"
             )
 
-env.AddPostAction("$PROGPATH", add_menu)
+env.AddPreAction("buildprog", add_menu)
 
