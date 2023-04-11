@@ -3,6 +3,8 @@ import os
 Import("env")
 # Co we need to add a menuconfig target?
 targets = env.get("__PIO_TARGETS") or {}
+print("targets:")
+print(targets)
 if "menuconfig" not in targets.values():
     framework = env.subst('$PIOFRAMEWORK')
     if framework.lower() != "espidf":
@@ -28,7 +30,7 @@ build_dir = os.path.join(env.subst('$BUILD_DIR'), "config")
 project_dir = env.subst('$PROJECT_DIR')
 framework = env.subst('$PIOFRAMEWORK')
 this_dir = os.path.join(env.subst('$PROJECT_LIBDEPS_DIR'), env.subst('$PIOENV'), 
-                        "Robusto-PlatformIO", "scripts");
+                        "Robusto-PlatformIO", "scripts")
 
 # Create the build folder
 print("mkdir -p {0}".format(build_dir))
