@@ -3,7 +3,6 @@ Import("env")
 
 import os
 
-
 # First, get our variables from the environment
 this_dir = os.path.join(env.subst('$PROJECT_LIBDEPS_DIR'), env.subst('$PIOENV'), 
                         "Robusto-PlatformIO", "scripts")
@@ -77,5 +76,5 @@ def add_menu(source, target, env):
                 description="Menuconfig is a tool for configuring an environment"
             )
 
-env.AddPreAction("buildprog", add_menu)
+env.AddPreAction("build", add_menu)
 
