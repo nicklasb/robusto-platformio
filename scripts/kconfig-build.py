@@ -38,8 +38,9 @@ if framework != "espidf":
     kconfig_filename = os.path.join(project_dir, "Kconfig." + pio_env)
     if os.path.isfile(kconfig_filename):
         # Generate the config
-        print("KCONFIG_CONFIG=.config.{0} genconfig Kconfig.{0} --header-path {1}/robconfig_.h".format(pio_env, build_dir))
-        os.system("KCONFIG_CONFIG=.config.{0} genconfig Kconfig.{0} --header-path {1}/robconfig_.h".format(pio_env, build_dir))
+        gen_command = "KCONFIG_CONFIG=.config.{0} genconfig {1} --header-path {2}".format(pio_env, kconfig_filename, os.path.join(build_dir, "robconfig_.h"))
+        print(gen_command)
+        os.system(gen_command)
     else: 
         print("Won't do any config, no", kconfig_filename, " file.")  
 else: 
