@@ -5,14 +5,21 @@ Import("env")
 targets = env.get("__PIO_TARGETS") or {}
 print("targets:")
 print(targets)
+
+this_dir = os.path.join(env.subst('$PROJECT_LIBDEPS_DIR'), env.subst('$PIOENV'), 
+                        "Robusto-PlatformIO", "scripts")
+project_dir = env.subst('$PROJECT_DIR')
+pio_env = env.subst('$PIOENV')
+build_dir = os.path.join(env.subst('$BUILD_DIR'), "config")
+framework = env.subst('$PIOFRAMEWORK')
+
 if "menuconfig" not in targets.values():
-    framework = env.subst('$PIOFRAMEWORK')
     if framework.lower() != "espidf":
-        project_dir = env.subst('$PROJECT_DIR')
-        pio_env = env.subst('$PIOENV')
+
         menuconfig_cmd = "python {0} {1}".format(
-            os.path.join(project_dir, "scripts", "run_menuconfig.py"),
+            os.path.join(this_dir, "run_menuconfig.py"),
             pio_env)
+        print("Addimg target, command: {0}".format(menuconfig_cmd))
         env.AddTarget(
             name="menuconfig",
             dependencies=None,
@@ -25,12 +32,7 @@ if "menuconfig" not in targets.values():
         )
 
 # First, get our variables from the environment
-pio_env = env.subst('$PIOENV')
-build_dir = os.path.join(env.subst('$BUILD_DIR'), "config")
-project_dir = env.subst('$PROJECT_DIR')
-framework = env.subst('$PIOFRAMEWORK')
-this_dir = os.path.join(env.subst('$PROJECT_LIBDEPS_DIR'), env.subst('$PIOENV'), 
-                        "Robusto-PlatformIO", "scripts")
+
 
 # Create the build folder
 print("mkdir -p {0}".format(build_dir))
