@@ -8,12 +8,15 @@ if "menuconfig" not in targets.values():
     if framework.lower() != "espidf":
         project_dir = env.subst('$PROJECT_DIR')
         pio_env = env.subst('$PIOENV')
+        menuconfig_cmd = "python {0} {1}".format(
+            os.path.join(project_dir, "scripts", "run_menuconfig.py"),
+            pio_env)
         env.AddTarget(
             name="menuconfig",
             dependencies=None,
             group="General",
             actions=[
-                "python {0}/scripts/run_menuconfig.py {1}".format(project_dir, pio_env)
+                menuconfig_cmd
             ],
             title="Run menuconfig",
             description="Menuconfig is a tool for configuring an environment"
@@ -51,7 +54,7 @@ if framework != "espidf":
     kconfig_filename = os.path.join(project_dir, "Kconfig." + pio_env)
     if os.path.isfile(kconfig_filename):
         # Generate the config
-        gen_command = "KCONFIG_CONFIG=.config.{0} genconfig {1} --header-path {1}/robconfig_.h".format(pio_env, build_dir, os.path.join(kconfig_filename, "robconfig_.h"))
+        gen_command = "KCONFIG_CONFIG=.config.{0} genconfig {1} --header-path {2}".format(pio_env, kconfig_filename, os.path.join(build_dir, "robconfig_.h"))
         print(gen_command)
         os.system(gen_command)
     else: 
