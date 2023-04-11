@@ -23,20 +23,19 @@ if "menuconfig" not in targets.values():
 pio_env = env.subst('$PIOENV')
 build_dir = os.path.join(env.subst('$BUILD_DIR'), "config")
 project_dir = env.subst('$PROJECT_DIR')
-script_dir = os.path.join(project_dir, "scripts")
 framework = env.subst('$PIOFRAMEWORK')
-
+this_dir = os.path.join("$PROJECT_LIBDEPS_DIR", "$PIOENV", "Robusto-PlatformIO", "scripts");
 
 # Create the build folder
 print("mkdir -p {0}".format(build_dir))
 os.system("mkdir -p {0}".format(build_dir))
 
 # Copy the include to there
-print("cp {0}/robconfig.h {1} ".format(script_dir, build_dir))
-os.system("cp {0}/robconfig.h {1} ".format(script_dir, build_dir))
+print("cp {0}/robconfig.h {1} ".format(this_dir, build_dir))
+os.system("cp {0}/robconfig.h {1} ".format(this_dir, build_dir))
 
 print("Build dir: ", build_dir)
-print("Script dir: ", script_dir)
+print("Script dir: ", this_dir)
 print("environment: ", pio_env)
 
 # Add files to path
