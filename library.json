@@ -23,6 +23,6 @@
     "frameworks": "*",
     "platforms": "*",
     "build": {
-        "extraScript": ["scripts/kconfig-build.py"]
+        "extraScript": "scripts/kconfig-build.py"
     }
 }
