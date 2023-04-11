@@ -23,9 +23,9 @@
     "frameworks": "*",
     "platforms": "*",
     "build": {
-        "extraScript": "scripts/init_env.py"
+        "extraScript": "scripts/pre-build.py"
     },
     "scripts": {
-        "postinstall": "scripts/pre-build.py"
+        "postinstall": "scripts/init_env.py"
     }
 }
