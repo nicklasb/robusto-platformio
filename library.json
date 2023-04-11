@@ -23,6 +23,6 @@
     "frameworks": "*",
     "platforms": "*",
     "build": {
-        "extraScript": ["pre:scripts/post-install.py", "scripts/pre-build.py"]
+        "extraScript": ["scripts/kconfig-build.py"]
     }
 }

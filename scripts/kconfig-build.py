@@ -10,6 +10,8 @@ pio_env = env.subst('$PIOENV')
 build_dir = os.path.join(env.subst('$BUILD_DIR'), "config")
 framework = env.subst('$PIOFRAMEWORK')
 
+
+
 # Create the build folder
 print("mkdir -p {0}".format(build_dir))
 os.system("mkdir -p {0}".format(build_dir))
@@ -41,3 +43,32 @@ if framework != "espidf":
         print("Won't do any config, no", kconfig_filename, " file.")  
 else: 
     print("Skipping ESP-IDF framework, it has its own Kconfig handling.")  
+
+
+
+def add_menu():
+    curr_env = env.subst('$PIOENV')
+    curr_dir = os.path.join(env.subst('$PROJECT_LIBDEPS_DIR'), curr_env, "Robusto-PlatformIO", "scripts")
+
+    # Co we need to add a menuconfig target?
+    targets = env.get("__PIO_TARGETS") or {}
+    
+    if "menuconfig" not in targets.values():
+        if framework.lower() != "espidf":
+
+            menuconfig_cmd = "python {0} {1} ".format(
+                os.path.join(curr_dir, "run_menuconfig.py"),curr_env
+                )
+            print("Addimg target, command: {0}".format(menuconfig_cmd))
+            env.AddTarget(
+                name="menuconfig",
+                dependencies=None,
+                group="General",
+                actions=[
+                    menuconfig_cmd
+                ],
+                title="Run menuconfig",
+                description="Menuconfig is a tool for configuring an environment"
+            )
+
+env.AddPostAction("$PROGPATH", add_menu)
