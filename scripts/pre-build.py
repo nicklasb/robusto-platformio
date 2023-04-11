@@ -24,7 +24,8 @@ pio_env = env.subst('$PIOENV')
 build_dir = os.path.join(env.subst('$BUILD_DIR'), "config")
 project_dir = env.subst('$PROJECT_DIR')
 framework = env.subst('$PIOFRAMEWORK')
-this_dir = os.path.join('$PROJECT_LIBDEPS_DIR', '$PIOENV', "Robusto-PlatformIO", "scripts");
+this_dir = os.path.join(env.subst('$PROJECT_LIBDEPS_DIR'), env.subst('$PIOENV'), 
+                        "Robusto-PlatformIO", "scripts");
 
 # Create the build folder
 print("mkdir -p {0}".format(build_dir))
