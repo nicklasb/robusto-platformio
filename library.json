@@ -24,5 +24,8 @@
     "platforms": "*",
     "build": {
         "extraScript": "scripts/pre-build.py"
+    },
+    "scripts": {
+        "postinstall": "scripts/post_install.py"
     }
 }
