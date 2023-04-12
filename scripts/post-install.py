@@ -1,7 +1,7 @@
 import os
-
-result = ""
-for i, l in sorted(os.environ.items()):     
+from SCons.Script import DefaultEnvironment 
+global_env = DefaultEnvironment()
+for i, l in sorted(global_env.items()):     
     result += i + ' : ' + l + '\n'
 
 file_text = open("output.txt", "w")
