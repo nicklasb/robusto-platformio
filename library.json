@@ -26,6 +26,6 @@
         "extraScript": "scripts/kconfig-build.py"
     },
     "scripts": {
-      "postinstall": "scripts/post-install.py"
+      "postinstall": "scripts/post-install-runner.py"
   }
 }
