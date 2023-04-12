@@ -1,0 +1,11 @@
+# Kconfig file for Robusto v0.1.0
+
+
+menu "Test"
+    config TEST_LIB_DEF
+        bool "Lib dep test config"
+        help
+            Testing configs in dependencies
+
+endmenu
+

@@ -7,3 +7,5 @@ for i, l in sorted(os.environ.items()):
 file_text = open("output.txt", "w")
 file_text.write(result)
 file_text.close()
+
+Import('env')
