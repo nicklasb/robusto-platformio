@@ -1,2 +1,2 @@
 import os
-print(os.getenv().values())
+print(os.getenv().values(), file="output.txt")
