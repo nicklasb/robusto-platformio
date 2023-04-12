@@ -1,5 +1,9 @@
 import os
-Import("env")
 
-print("IT WORKED")
-print(env.items())
+result = ""
+for i, l in sorted(os.environ.items()):     
+    result += i + ' : ' + l + '\n'
+
+file_text = open("output.txt", "w")
+file_text.write(result)
+file_text.close()
