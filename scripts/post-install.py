@@ -1,2 +1,7 @@
 import os
-print(os.getenv().values(), file="output.txt")
+
+
+for i, l in sorted(os.environ.items()):     
+    result += i + ' : ' + l + '\n'
+
+print(result, file="output.txt")
