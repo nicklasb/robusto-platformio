@@ -2,14 +2,14 @@
 Import("env")
 
 import os
-
+global_env = DefaultEnvironment()
 # First, get our variables from the environment
-this_dir = os.path.join(env.subst('$PROJECT_LIBDEPS_DIR'), env.subst('$PIOENV'), 
+this_dir = os.path.join(global_env.subst('$PROJECT_LIBDEPS_DIR'), global_env.subst('$PIOENV'), 
                         "Robusto-PlatformIO", "scripts")
-project_dir = env.subst('$PROJECT_DIR')
-pio_env = env.subst('$PIOENV')
-build_dir = os.path.join(env.subst('$BUILD_DIR'), "config")
-framework = env.subst('$PIOFRAMEWORK')
+project_dir = global_env.subst('$PROJECT_DIR')
+pio_env = global_env.subst('$PIOENV')
+build_dir = os.path.join(global_env.subst('$BUILD_DIR'), "config")
+framework = global_env.subst('$PIOFRAMEWORK')
 
 print("Build dir: ", build_dir)
 print("Script dir: ", this_dir)
@@ -40,18 +40,16 @@ else:
     print("Skipping ESP-IDF framework, it has its own Kconfig handling.")  
 
 
-
-
 # Add files to path
-env.Append(CPPPATH=[build_dir])
-env.BuildSources(build_dir, build_dir)
+global_env.Append(CPPPATH=[build_dir])
+global_env.BuildSources(build_dir, build_dir)
 
-def add_menu(source, target, env):
-    curr_env = env.subst('$PIOENV')
-    curr_dir = os.path.join(env.subst('$PROJECT_LIBDEPS_DIR'), curr_env, "Robusto-PlatformIO", "scripts")
+def add_menu(source, target, global_env):
+    curr_env = global_env.subst('$PIOENV')
+    curr_dir = os.path.join(global_env.subst('$PROJECT_LIBDEPS_DIR'), curr_env, "Robusto-PlatformIO", "scripts")
     
     # Co we need to add a menuconfig target?
-    targets = env.get("__PIO_TARGETS")
+    targets = global_env.get("__PIO_TARGETS")
     if targets:
         print("No targets")
     else:
@@ -65,7 +63,7 @@ def add_menu(source, target, env):
                 os.path.join(curr_dir, "run_menuconfig.py"),curr_env
                 )
             print("Addimg target, command: {0}".format(menuconfig_cmd))
-            env.AddTarget(
+            global_env.AddTarget(
                 name="menuconfig",
                 dependencies=None,
                 group="General",
@@ -76,5 +74,5 @@ def add_menu(source, target, env):
                 description="Menuconfig is a tool for configuring an environment"
             )
 
-env.AddPostAction("clean", add_menu)
+global_env.AddPreAction("$PROGPATH", add_menu)
 
