@@ -1,1 +1,2 @@
-print(os.getenv().values());
+import os
+print(os.getenv().values())
