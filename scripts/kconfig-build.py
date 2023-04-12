@@ -59,17 +59,17 @@ curr_env = env.subst('$PIOENV')
 curr_dir = os.path.join(env.subst('$PROJECT_LIBDEPS_DIR'), curr_env, "Robusto-PlatformIO", "scripts")
 
 # Co we need to add a menuconfig target?
-targets = env.get("__PIO_TARGETS") or {}
+targets = global_env.get("__PIO_TARGETS") or {}
 
 if "menuconfig" not in targets.values() and framework.lower() != "espidf":
     menuconfig_cmd = "python {0} {1} ".format(
         os.path.join(curr_dir, "run_menuconfig.py"),curr_env
         )
     print("Adding target, command: {0}".format(menuconfig_cmd))
-    env.AddTarget(
+    global_env.AddTarget(
         name="menuconfig",
         dependencies=None,
-        group="Robusto",
+        group="General",
         actions=[
             menuconfig_cmd
         ],
