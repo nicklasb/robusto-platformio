@@ -1,16 +1,18 @@
 
 Import("env")
-
+Import("projenv")
 import os
 global_env = DefaultEnvironment()
 # First, get our variables from the environment
-this_dir = os.path.join(global_env.subst('$PROJECT_LIBDEPS_DIR'), global_env.subst('$PIOENV'), 
+this_dir = os.path.join(env.subst('$PROJECT_LIBDEPS_DIR'), env.subst('$PIOENV'), 
                         "Robusto-PlatformIO", "scripts")
-project_dir = global_env.subst('$PROJECT_DIR')
-pio_env = global_env.subst('$PIOENV')
-build_dir = os.path.join(global_env.subst('$BUILD_DIR'), "config")
-framework = global_env.subst('$PIOFRAMEWORK')
-
+project_dir = env.subst('$PROJECT_DIR')
+pio_env = env.subst('$PIOENV')
+build_dir = os.path.join(env.subst('$BUILD_DIR'), "config")
+framework = projenv.subst('$PIOFRAMEWORK')
+#print("--------------------------------------------------")
+#print(env)
+#print("--------------------------------------------------")
 print("Build dir: ", build_dir)
 print("Script dir: ", this_dir)
 print("environment: ", pio_env)
@@ -29,50 +31,51 @@ os.system(copy_include_cmd)
 if framework != "espidf":
     # Check if there is anything for us to do here. TODO: Create the file if it is missing? Default configs?
     kconfig_filename = os.path.join(project_dir, "Kconfig." + pio_env)
+    kconfig_src_filename = os.path.join(project_dir, ".config.{0}".format(pio_env))
+    
     if os.path.isfile(kconfig_filename):
         # Generate the config
-        gen_command = "KCONFIG_CONFIG=.config.{0} genconfig {1} --header-path {2}".format(pio_env, kconfig_filename, os.path.join(build_dir, "robconfig_.h"))
+        gen_command = "KCONFIG_CONFIG={0} genconfig {1} --header-path {2}".format(kconfig_src_filename, kconfig_filename, os.path.join(build_dir, "robconfig_.h"))
         print(gen_command)
         os.system(gen_command)
+            # Add files to path
+
+
     else: 
         print("Won't do any config, no", kconfig_filename, " file.")  
+
+    # Add files to path (even though the above didn't happen to allow for manual stuff)
+    env.Append(CPPPATH=[build_dir])
+    for lb in env.GetLibBuilders():
+        lb.env.Append(CPPPATH=[build_dir])
+
 else: 
     print("Skipping ESP-IDF framework, it has its own Kconfig handling.")  
 
 
-# Add files to path
-global_env.Append(CPPPATH=[build_dir])
-global_env.BuildSources(build_dir, build_dir)
+#def add_menu(source, target, env):
+print("IN ADD MENU ---------------------------------------")
+curr_env = env.subst('$PIOENV')
+curr_dir = os.path.join(env.subst('$PROJECT_LIBDEPS_DIR'), curr_env, "Robusto-PlatformIO", "scripts")
 
-def add_menu(source, target, global_env):
-    curr_env = global_env.subst('$PIOENV')
-    curr_dir = os.path.join(global_env.subst('$PROJECT_LIBDEPS_DIR'), curr_env, "Robusto-PlatformIO", "scripts")
-    
-    # Co we need to add a menuconfig target?
-    targets = global_env.get("__PIO_TARGETS")
-    if targets:
-        print("No targets")
-    else:
-        print("all targets: ")
-        print(targets.values())
+# Co we need to add a menuconfig target?
+targets = env.get("__PIO_TARGETS") or {}
 
-    if "menuconfig" not in targets.values():
-        if framework.lower() != "espidf":
+if "menuconfig" not in targets.values() and framework.lower() != "espidf":
+    menuconfig_cmd = "python {0} {1} ".format(
+        os.path.join(curr_dir, "run_menuconfig.py"),curr_env
+        )
+    print("Adding target, command: {0}".format(menuconfig_cmd))
+    env.AddTarget(
+        name="menuconfig",
+        dependencies=None,
+        group="Robusto",
+        actions=[
+            menuconfig_cmd
+        ],
+        title="Run menuconfig",
+        description="Menuconfig is a tool for configuring an environment"
+    )
 
-            menuconfig_cmd = "python {0} {1} ".format(
-                os.path.join(curr_dir, "run_menuconfig.py"),curr_env
-                )
-            print("Addimg target, command: {0}".format(menuconfig_cmd))
-            global_env.AddTarget(
-                name="menuconfig",
-                dependencies=None,
-                group="General",
-                actions=[
-                    menuconfig_cmd
-                ],
-                title="Run menuconfig",
-                description="Menuconfig is a tool for configuring an environment"
-            )
-
-global_env.AddPreAction("$PROGPATH", add_menu)
+#env.AddPreAction("buildprog", add_menu)
 
