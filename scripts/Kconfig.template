@@ -1,4 +1,0 @@
-orsource "components/**/Kconfig"
-orsource "components/**/Kconfig.projbuild"
-orsource ".pio/libdeps/RaspberryPi_Pico/**/Kconfig"
-orsource ".pio/libdeps/RaspberryPi_Pico/**/Kconfig.projbuild"
