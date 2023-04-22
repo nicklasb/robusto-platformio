@@ -14,6 +14,7 @@ print("Kconfig_filename: ", Kconfig_filename)
 
 # Create the base for the files (TOOD: Can you pipe a stream to Kconfig, perhaps?)
 file = open(Kconfig_filename, "w")
+# TODO: We probably need more sources here
 file.write("orsource \"" + os.path.join("components", "**", "Kconfig.projbuild") + "\"\n")
 file.write("orsource \"" + os.path.join(".pio", "libdeps", pio_env, "**", "Kconfig.projbuild") + "\"\n")
 file.close()
