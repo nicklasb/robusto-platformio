@@ -21,10 +21,10 @@ print("framework: ", framework)
 print("mkdir -p {0}".format(build_dir))
 os.system("mkdir -p {0}".format(build_dir))
 
-# Copy the include to there
-copy_include_cmd = "cp {0} {1} ".format(os.path.join(this_dir, "robconfig.h"), build_dir)
-print(copy_include_cmd)
-os.system(copy_include_cmd)
+# Copy the include to there  - This file has been moved do robusto-base
+#copy_include_cmd = "cp {0} {1} ".format(os.path.join(this_dir, "robconfig.h"), build_dir)
+#print(copy_include_cmd)
+#os.system(copy_include_cmd)
 
 
 # If its not ESP-IDF, we add the settings header anyway so that the framework and applications don't have to care.
