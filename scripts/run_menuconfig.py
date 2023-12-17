@@ -17,6 +17,7 @@ file = open(Kconfig_filename, "w")
 # TODO: We probably need more sources here
 file.write("orsource \"" + os.path.join("components", "**", "Kconfig.projbuild") + "\"\n")
 file.write("orsource \"" + os.path.join(".pio", "libdeps", pio_env, "**", "Kconfig.projbuild") + "\"\n")
+file.write("orsource \"" + os.path.join("examples", "src","Kconfig.projbuild") + "\"\n")
 file.close()
 
 config_filename = os.path.join(project_dir, ".config.{0}".format(pio_env))
