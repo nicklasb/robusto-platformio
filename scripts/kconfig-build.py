@@ -18,8 +18,8 @@ print("Script dir: ", this_dir)
 print("environment: ", pio_env)
 print("framework: ", framework)
 # Create the build folder
-print("mkdir -p {0}".format(build_dir))
-os.system("mkdir -p {0}".format(build_dir))
+print("Create the build folder: {0}".format(build_dir))
+os.makedirs(build_dir)
 
 # Copy the include to there  - This file has been moved do robusto-base
 #copy_include_cmd = "cp {0} {1} ".format(os.path.join(this_dir, "robconfig.h"), build_dir)
