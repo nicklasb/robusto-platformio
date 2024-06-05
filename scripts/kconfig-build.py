@@ -20,7 +20,7 @@ print("framework: ", framework)
 if not os.path.exists(build_dir):
   # Create the build folder
   print("Create the build folder: {0}".format(build_dir))
-  os.makedirs(build_dir))
+  os.makedirs(build_dir)
 
 # Copy the include to there  - This file has been moved do robusto-base
 #copy_include_cmd = "cp {0} {1} ".format(os.path.join(this_dir, "robconfig.h"), build_dir)
