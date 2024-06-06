@@ -4,7 +4,7 @@ Import("projenv")
 import os
 global_env = DefaultEnvironment()
 
-file = open('out.txt', 'w')
+f = open('out.txt', 'w')
 # First, get our variables from the environment
 this_dir = os.path.join(env.subst('$PROJECT_LIBDEPS_DIR'), env.subst('$PIOENV'), 
                         "Robusto-PlatformIO", "scripts")
