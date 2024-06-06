@@ -24,44 +24,6 @@ if not os.path.exists(build_dir):
   print("Create the build folder: {0}".format(build_dir))
   os.makedirs(build_dir)
 
-# Copy the include to there  - This file has been moved do robusto-base
-#copy_include_cmd = "cp {0} {1} ".format(os.path.join(this_dir, "robconfig.h"), build_dir)
-#print(copy_include_cmd)
-#os.system(copy_include_cmd)
-
-# If its not ESP-IDF, we add the settings header anyway so that the framework and applications don't have to care.
-if framework != "espidf":
-    # Check if there is anything for us to do here. TODO: Create the file if it is missing? Default configs?
-    kconfig_filename = os.path.join(project_dir, "Kconfig." + pio_env)
-    kconfig_src_filename = os.path.join(project_dir, ".config.{0}".format(pio_env))
-    print('kconfig_filename:', kconfig_filename, file=f) 
-    print('kconfig_src_filename:', kconfig_src_filename, file=f) 
-    if os.path.isfile(kconfig_filename):
-      # Generate the config
-      os.environ["KCONFIG_CONFIG"] = kconfig_src_filename
-      gen_command = "genconfig {0} --header-path {1}".format(kconfig_filename, os.path.join(build_dir, "robconfig_.h"))
-      print("gen_command", gen_command, file = f)
-      os.system(gen_command)
-      
-      
-      #gen_command = "KCONFIG_CONFIG={0} genconfig {1} --header-path {2}".format(kconfig_src_filename, kconfig_filename, os.path.join(build_dir, "robconfig_.h"))
-      #print(gen_command)
-      #os.system(gen_command)
-          # Add files to path
-
-
-    else: 
-        print("Won't do any config, no", kconfig_filename, " file.")  
-
-    # Add files to path (even though the above didn't happen to allow for manual stuff)
-    env.Append(CPPPATH=[build_dir])
-    for lb in env.GetLibBuilders():
-        lb.env.Append(CPPPATH=[build_dir])
-
-else: 
-    print("Skipping ESP-IDF framework, it has its own Kconfig handling.")  
-
-f.close()
 #def add_menu(source, target, env):
 print("IN ADD MENU ---------------------------------------")
 curr_env = env.subst('$PIOENV')
