@@ -57,5 +57,3 @@ if  framework.lower() != "espidf":
         description="Menuconfig is a tool for configuring an environment"
     )
 
-#env.AddPreAction("buildprog", add_menu)
-
