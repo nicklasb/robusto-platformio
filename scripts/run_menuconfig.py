@@ -1,6 +1,5 @@
 
 import os
-
 import sys
 import subprocess
 
@@ -24,27 +23,13 @@ file.write("orsource \".pio/libdeps/" + pio_env + "/**/Kconfig.projbuild\"\n")
 file.write("orsource \"examples/src/Kconfig.projbuild\"\n")
 file.close()
 
-
 print("Running menuconfig on ", Kconfig_filename, " save at ", config_filename)
 # Create an environment for the process
 env_kconfig = {}
 env_kconfig.update(os.environ)
 env_kconfig.update({"KCONFIG_CONFIG": config_filename})
 
-#if not os.path.isfile(config_filename):
-#    print("Create minimal config at: ", Kconfig_filename)
-#    subprocess.run(["savedefconfig", "--kconfig", Kconfig_filename, "--out", config_filename], cwd=project_dir, env=env_kconfig, start_new_session=False)
-
-#if not os.path.isfile(config_filename):
-#    print("Create minimal config with defaults: ", config_filename)
-#    subprocess.run(["defconfig", config_filename, "--kconfig", Kconfig_filename], cwd=project_dir, env=env_kconfig, start_new_session=False)
-
 # Call menuconfig to configure a specified file
 subprocess.run(["menuconfig", Kconfig_filename], cwd=project_dir, env=env_kconfig, start_new_session=False)
 
-if os.path.isfile(config_filename):
-    os.environ["KCONFIG_CONFIG"] = config_filename
-    build_dir = os.path.join(project_dir, ".pio", "build", pio_env)
-    gen_command = "genconfig {0} --header-path {1}".format(Kconfig_filename, os.path.join(build_dir, "config", "robconfig_.h"))
-    print("gen_command: ", gen_command)
-    os.system(gen_command)
+
