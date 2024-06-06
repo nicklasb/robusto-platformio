@@ -3,6 +3,8 @@ Import("env")
 Import("projenv")
 import os
 global_env = DefaultEnvironment()
+
+file = open('out.txt', 'w')
 # First, get our variables from the environment
 this_dir = os.path.join(env.subst('$PROJECT_LIBDEPS_DIR'), env.subst('$PIOENV'), 
                         "Robusto-PlatformIO", "scripts")
@@ -27,23 +29,20 @@ if not os.path.exists(build_dir):
 #print(copy_include_cmd)
 #os.system(copy_include_cmd)
 
-
-
-
-
-
 # If its not ESP-IDF, we add the settings header anyway so that the framework and applications don't have to care.
 if framework != "espidf":
     # Check if there is anything for us to do here. TODO: Create the file if it is missing? Default configs?
     kconfig_filename = os.path.join(project_dir, "Kconfig." + pio_env)
     kconfig_src_filename = os.path.join(project_dir, ".config.{0}".format(pio_env))
-    
+    print('kconfig_filename:', kconfig_filename, file=f) 
+    print('kconfig_src_filename:', kconfig_src_filename, file=f) 
     if os.path.isfile(kconfig_filename):
       # Generate the config
       os.environ["KCONFIG_CONFIG"] = kconfig_src_filename
       gen_command = "genconfig {0} --header-path {1}".format(kconfig_filename, os.path.join(build_dir, "robconfig_.h"))
-      print(gen_command)
+      print("gen_command", gen_command, file = f)
       os.system(gen_command)
+      
       
       #gen_command = "KCONFIG_CONFIG={0} genconfig {1} --header-path {2}".format(kconfig_src_filename, kconfig_filename, os.path.join(build_dir, "robconfig_.h"))
       #print(gen_command)
@@ -62,7 +61,7 @@ if framework != "espidf":
 else: 
     print("Skipping ESP-IDF framework, it has its own Kconfig handling.")  
 
-
+f.close()
 #def add_menu(source, target, env):
 print("IN ADD MENU ---------------------------------------")
 curr_env = env.subst('$PIOENV')
