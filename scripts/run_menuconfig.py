@@ -1,30 +1,52 @@
+
+Import("env")
+Import("projenv")
 import os
+global_env = DefaultEnvironment()
 
-import sys
-import subprocess
-project_dir =os.getcwd()
+f = open('out.txt', 'w')
 # First, get our variables from the environment
-pio_env = sys.argv[1]
-print("Environment: ", pio_env)
-run_path = os.path.dirname(sys.argv[0])
-print("Run path: ", run_path)
-print("Project dir: ", project_dir)
-Kconfig_filename = os.path.join(project_dir, "Kconfig.{0}".format(pio_env))
-print("Kconfig_filename: ", Kconfig_filename)
+this_dir = os.path.join(env.subst('$PROJECT_LIBDEPS_DIR'), env.subst('$PIOENV'), 
+                        "Robusto-PlatformIO", "scripts")
+project_dir = env.subst('$PROJECT_DIR')
+pio_env = env.subst('$PIOENV')
+build_dir = os.path.join(env.subst('$BUILD_DIR'), "config")
+framework = projenv.subst('$PIOFRAMEWORK')
+#print("--------------------------------------------------")
+#print(env)
+#print("--------------------------------------------------")
+print("Build dir: ", build_dir)
+print("Script dir: ", this_dir)
+print("environment: ", pio_env)
+print("framework: ", framework)
+if not os.path.exists(build_dir):
+  # Create the build folder
+  print("Create the build folder: {0}".format(build_dir))
+  os.makedirs(build_dir)
 
-# Create the base for the files (TOOD: Can you pipe a stream to Kconfig, perhaps?)
-file = open(Kconfig_filename, "w")
-# TODO: We probably need more sources here
-file.write("orsource \"" + os.path.join("components", "**", "Kconfig.projbuild") + "\"\n")
-file.write("orsource \"" + os.path.join(".pio", "libdeps", pio_env, "**", "Kconfig.projbuild") + "\"\n")
-file.write("orsource \"" + os.path.join("examples", "src","Kconfig.projbuild") + "\"\n")
-file.close()
+#def add_menu(source, target, env):
+print("IN ADD MENU ---------------------------------------")
+curr_env = env.subst('$PIOENV')
+curr_dir = os.path.join(env.subst('$PROJECT_LIBDEPS_DIR'), curr_env, "Robusto-PlatformIO", "scripts")
 
-config_filename = os.path.join(project_dir, ".config.{0}".format(pio_env))
-print("Running menuconfig on ", Kconfig_filename, " save at ", config_filename)
-# Create an environment for the process
-env_kconfig = {}
-env_kconfig.update(os.environ)
-env_kconfig.update({"KCONFIG_CONFIG": config_filename})
-# Call menuconfig to configure a specified file
-subprocess.run(["menuconfig", Kconfig_filename], cwd=project_dir, env=env_kconfig, start_new_session=False)
+# Co we need to add a menuconfig target?
+targets = global_env.get("__PIO_TARGETS") or {}
+
+if "menuconfig" not in targets.values() and framework.lower() != "espidf":
+    menuconfig_cmd = "python {0} {1} ".format(
+        os.path.join(curr_dir, "run_menuconfig.py"),curr_env
+        )
+    print("Adding target, command: {0}".format(menuconfig_cmd))
+    global_env.AddTarget(
+        name="menuconfig",
+        dependencies=None,
+        group="General",
+        actions=[
+            menuconfig_cmd
+        ],
+        title="Run menuconfig",
+        description="Menuconfig is a tool for configuring an environment"
+    )
+
+#env.AddPreAction("buildprog", add_menu)
+
